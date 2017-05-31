@@ -7,3 +7,6 @@ The app also includes a homescreen widget to enhance the user's experience by di
 for a desired recipe.
 
 The app uses a Master/Detail approach to create a responsive design that works on phones and tablets.
+
+### License
+The project is licensed under the MIT License - see [LICENSE.txt](LICENSE.txt) file for detail.
