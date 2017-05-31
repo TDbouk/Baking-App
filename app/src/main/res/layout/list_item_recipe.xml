@@ -2,7 +2,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cv_recipe"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="4dp"
@@ -16,16 +16,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_recipe_name"
+            android:id="@+id/tv_recipe_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="8dp"
-            android:text="NUTELLA"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <ImageView
-            android:id="@+id/tv_recipe_image"
+            android:id="@+id/iv_recipe_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:adjustViewBounds="true"
@@ -34,18 +33,15 @@
 
         <TextView
             android:id="@+id/tv_recipe_number_ingredients"
-            style="@style/recipe_card_detail"
-            android:text="ingredients: 7" />
+            style="@style/recipe_card_detail" />
 
         <TextView
             android:id="@+id/tv_recipe_number_steps"
-            style="@style/recipe_card_detail"
-            android:text="Steps: 8" />
+            style="@style/recipe_card_detail" />
 
         <TextView
             android:id="@+id/tv_recipe_number_servings"
-            style="@style/recipe_card_detail"
-            android:text="Servings: 18" />
+            style="@style/recipe_card_detail" />
     </LinearLayout>
 
 </android.support.v7.widget.CardView>
