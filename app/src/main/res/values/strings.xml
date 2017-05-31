@@ -5,5 +5,7 @@
     <string name="title_ingredients">Ingredients: %d</string>
     <string name="title_steps">Steps: %d</string>
 
+    <string name="ingredients">Ingredients</string>
+
     <string name="cd_recipe">Recipe %s</string>
 </resources>

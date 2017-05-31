@@ -1,7 +1,6 @@
 package tdbouk.udacity.bakingapp.ui;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -90,10 +88,9 @@ public class RecipeFragment extends Fragment {
         return rooView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(Recipe recipe) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onRecipeFragmentInteraction(recipe);
         }
     }
 
@@ -115,90 +112,93 @@ public class RecipeFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-}
-
-class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
-    private ArrayList<Recipe> mRecipes;
-    private Context mContext;
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView recipeTitle;
-        final TextView recipeServings;
-        final TextView recipeSteps;
-        final TextView recipeIngredients;
-        final ImageView recipeImage;
-
-        ViewHolder(View v) {
-            super(v);
-            recipeTitle = (TextView) v.findViewById(R.id.tv_recipe_title);
-            recipeServings = (TextView) v.findViewById(R.id.tv_recipe_number_servings);
-            recipeSteps = (TextView) v.findViewById(R.id.tv_recipe_number_steps);
-            recipeIngredients = (TextView) v.findViewById(R.id.tv_recipe_number_ingredients);
-            recipeImage = (ImageView) v.findViewById(R.id.iv_recipe_image);
-        }
+        void onRecipeFragmentInteraction(Recipe recipe);
     }
 
-    public RecipesAdapter(Context context, ArrayList<Recipe> recipes) {
-        mContext = context;
-        mRecipes = recipes;
-    }
+    class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
+        private ArrayList<Recipe> mRecipes;
+        private Context mContext;
 
-    public void swapAdapter(ArrayList<Recipe> recipes) {
-        if (recipes == null || recipes.size() == 0) return;
-        mRecipes = recipes;
-        notifyDataSetChanged();
-    }
+        class ViewHolder extends RecyclerView.ViewHolder {
+            final TextView recipeTitle;
+            final TextView recipeServings;
+            final TextView recipeSteps;
+            final TextView recipeIngredients;
+            final ImageView recipeImage;
 
-    // Create new views (invoked by the layout manager)
-    @Override
-    public RecipesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                        int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_recipe, parent, false);
-
-        final ViewHolder vh = new ViewHolder(v);
-
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(mContext, "Clicked", Toast.LENGTH_SHORT).show();
+            ViewHolder(View v) {
+                super(v);
+                recipeTitle = (TextView) v.findViewById(R.id.tv_recipe_title);
+                recipeServings = (TextView) v.findViewById(R.id.tv_recipe_number_servings);
+                recipeSteps = (TextView) v.findViewById(R.id.tv_recipe_number_steps);
+                recipeIngredients = (TextView) v.findViewById(R.id.tv_recipe_number_ingredients);
+                recipeImage = (ImageView) v.findViewById(R.id.iv_recipe_image);
             }
-        });
+        }
 
-        return vh;
-    }
+        RecipesAdapter(Context context, ArrayList<Recipe> recipes) {
+            mContext = context;
+            mRecipes = recipes;
+        }
 
-    // Replace the contents of a view (invoked by the layout manager)
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+        void swapAdapter(ArrayList<Recipe> recipes) {
+            if (recipes == null || recipes.size() == 0) return;
+            mRecipes = recipes;
+            notifyDataSetChanged();
+        }
 
-        // Get recipe object at position
-        Recipe recipe = mRecipes.get(position);
+        // Create new views (invoked by the layout manager)
+        @Override
+        public RecipesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                            int viewType) {
+            // create a new view
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.list_item_recipe, parent, false);
 
-        // Set the views
-        holder.recipeTitle.setText(recipe.getName());
-        holder.recipeServings.setText(mContext.getString(
-                R.string.title_servings, recipe.getNumberOfServings()));
-        holder.recipeSteps.setText(mContext.getString(
-                R.string.title_steps, recipe.getSteps().size()));
-        holder.recipeIngredients.setText(mContext.getString(
-                R.string.title_ingredients, recipe.getIngredients().size()));
+            final ViewHolder vh = new ViewHolder(v);
 
-        // set content description based on recipe's name
-        holder.recipeImage.setContentDescription(mContext.getString(
-                R.string.cd_recipe, recipe.getName()));
-    }
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-    // Return the size of your dataset (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        if (mRecipes == null || mRecipes.size() == 0) return 0;
-        return mRecipes.size();
+                    final int position = vh.getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Recipe r = mRecipes.get(position);
+                        onButtonPressed(r);
+                    }
+                }
+            });
+
+            return vh;
+        }
+
+        // Replace the contents of a view (invoked by the layout manager)
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+
+            // Get recipe object at position
+            Recipe recipe = mRecipes.get(position);
+
+            // Set the views
+            holder.recipeTitle.setText(recipe.getName());
+            holder.recipeServings.setText(mContext.getString(
+                    R.string.title_servings, recipe.getNumberOfServings()));
+            holder.recipeSteps.setText(mContext.getString(
+                    R.string.title_steps, recipe.getSteps().size()));
+            holder.recipeIngredients.setText(mContext.getString(
+                    R.string.title_ingredients, recipe.getIngredients().size()));
+
+            // set content description based on recipe's name
+            holder.recipeImage.setContentDescription(mContext.getString(
+                    R.string.cd_recipe, recipe.getName()));
+        }
+
+        // Return the size of dataset (invoked by the layout manager)
+        @Override
+        public int getItemCount() {
+            if (mRecipes == null || mRecipes.size() == 0) return 0;
+            return mRecipes.size();
+        }
     }
 }
 
