@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import tdbouk.udacity.bakingapp.R;
+import tdbouk.udacity.bakingapp.data.Ingredient;
 import tdbouk.udacity.bakingapp.data.Recipe;
 
 
@@ -19,6 +21,7 @@ public class RecipeStepsFragment extends Fragment {
 
     private Recipe mRecipe;
     private OnFragmentInteractionListener mListener;
+    private String mIngredientsText = "";
 
     public RecipeStepsFragment() {
         // Required empty public constructor
@@ -44,6 +47,7 @@ public class RecipeStepsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mRecipe = getArguments().getParcelable(ARG_RECIPE);
+            getIngredients();
         }
     }
 
@@ -55,8 +59,10 @@ public class RecipeStepsFragment extends Fragment {
 
         View bottomSheetView = rootView.findViewById(R.id.bottom_sheet);
         final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView);
-
         final Button ingredientsButton = (Button) rootView.findViewById(R.id.btn_ingredients);
+        final TextView ingredientsTextView = (TextView) rootView.findViewById(R.id.tv_ingredients);
+        ingredientsTextView.setText(mIngredientsText);
+
         ingredientsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,6 +76,15 @@ public class RecipeStepsFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private void getIngredients() {
+        if (mRecipe != null && mRecipe.getIngredients() != null) {
+            for (Ingredient in : mRecipe.getIngredients()) {
+                mIngredientsText = mIngredientsText.concat(in.getIngredient()
+                        + " x " + in.getQuantity() + " " + in.getMeasure()) + "\n";
+            }
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
