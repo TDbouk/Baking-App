@@ -63,7 +63,7 @@ public class RecipeStepsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
 
         // Set up Bottom Sheet
-        View bottomSheetView = rootView.findViewById(R.id.bottom_sheet);
+        final View bottomSheetView = rootView.findViewById(R.id.bottom_sheet);
         final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView);
         final Button ingredientsButton = (Button) rootView.findViewById(R.id.btn_ingredients);
         final TextView ingredientsTextView = (TextView) rootView.findViewById(R.id.tv_ingredients);

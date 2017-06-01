@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -140,10 +142,8 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
      * @param step The Step video to play.
      */
     private void initializePlayer(Step step) {
-        // There is no video to play
+        // There is no step to show
         if (step == null)
-            return;
-        if (step.getVideoUrl() == null)
             return;
 
         // Create an instance of the ExoPlayer.
@@ -153,6 +153,15 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
             mPlayerView.setPlayer(mExoPlayer);
         }
+
+        // Set a default image if video doesn't exist
+        // and thumbnail is not available
+        if (step.getVideoUrl() == null || step.getVideoUrl().isEmpty())
+            if (step.getThumbnailUrl() == null || step.getVideoUrl().isEmpty()) {
+                Bitmap defaultIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_i_love_food_white);
+                mPlayerView.setDefaultArtwork(defaultIcon);
+                return;
+            }
 
         // Set the ExoPlayer.EventListener to this activity.
         mExoPlayer.addListener(this);
