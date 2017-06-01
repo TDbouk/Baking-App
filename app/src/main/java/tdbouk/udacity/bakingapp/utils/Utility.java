@@ -54,7 +54,7 @@ public class Utility {
                     step = new Step();
                     step.setId(stepsJsonObject.getInt(Constants.JSON_STEP_ID));
                     step.setShortDescription(stepsJsonObject.getString(Constants.JSON_STEP_SHORT_DESCRIPTION));
-                    step.setShortDescription(stepsJsonObject.getString(Constants.JSON_STEP_DESCRIPTION));
+                    step.setDescription(stepsJsonObject.getString(Constants.JSON_STEP_DESCRIPTION));
                     step.setVideoUrl(stepsJsonObject.getString(Constants.JSON_STEP_VIDEO_URL));
                     step.setThumbnailUrl(stepsJsonObject.getString(Constants.JSON_STEP_THUMBNAIL_URL));
 

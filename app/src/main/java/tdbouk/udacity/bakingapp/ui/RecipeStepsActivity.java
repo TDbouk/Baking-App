@@ -1,13 +1,13 @@
 package tdbouk.udacity.bakingapp.ui;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
+import tdbouk.udacity.bakingapp.data.Step;
 
 public class RecipeStepsActivity extends AppCompatActivity implements RecipeStepsFragment.OnFragmentInteractionListener {
 
@@ -30,7 +30,7 @@ public class RecipeStepsActivity extends AppCompatActivity implements RecipeStep
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction(Step step) {
 
     }
 }

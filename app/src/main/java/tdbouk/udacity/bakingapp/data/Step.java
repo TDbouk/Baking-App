@@ -10,11 +10,20 @@ public class Step implements Parcelable {
 
     private int id;
     private String shortDescription;
+    private String description;
     private String videoUrl;
     private String thumbnailUrl;
 
     public Step() {
 
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getId() {
@@ -49,13 +58,6 @@ public class Step implements Parcelable {
         this.thumbnailUrl = thumbnailUrl;
     }
 
-    protected Step(Parcel in) {
-        id = in.readInt();
-        shortDescription = in.readString();
-        videoUrl = in.readString();
-        thumbnailUrl = in.readString();
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -63,17 +65,25 @@ public class Step implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(shortDescription);
-        dest.writeString(videoUrl);
-        dest.writeString(thumbnailUrl);
+        dest.writeInt(this.id);
+        dest.writeString(this.shortDescription);
+        dest.writeString(this.description);
+        dest.writeString(this.videoUrl);
+        dest.writeString(this.thumbnailUrl);
     }
 
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Step> CREATOR = new Parcelable.Creator<Step>() {
+    protected Step(Parcel in) {
+        this.id = in.readInt();
+        this.shortDescription = in.readString();
+        this.description = in.readString();
+        this.videoUrl = in.readString();
+        this.thumbnailUrl = in.readString();
+    }
+
+    public static final Creator<Step> CREATOR = new Creator<Step>() {
         @Override
-        public Step createFromParcel(Parcel in) {
-            return new Step(in);
+        public Step createFromParcel(Parcel source) {
+            return new Step(source);
         }
 
         @Override
