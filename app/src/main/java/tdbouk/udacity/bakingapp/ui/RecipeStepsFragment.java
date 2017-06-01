@@ -2,7 +2,6 @@ package tdbouk.udacity.bakingapp.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,19 +11,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Ingredient;
 import tdbouk.udacity.bakingapp.data.Recipe;
 import tdbouk.udacity.bakingapp.data.Step;
+import tdbouk.udacity.bakingapp.utils.Utility;
 
 
 public class RecipeStepsFragment extends Fragment {
     private static final String ARG_RECIPE = "recipe";
+    private static final String ARG_POSITION = "position";
 
     private Recipe mRecipe;
+    private int mPosition;
     private OnFragmentInteractionListener mListener;
     private String mIngredientsText = "";
 
@@ -36,13 +38,15 @@ public class RecipeStepsFragment extends Fragment {
      * Factory method used to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param recipe Recipe.
+     * @param recipe   Recipe.
+     * @param position list position.
      * @return A new instance of fragment RecipeStepsFragment.
      */
-    public static RecipeStepsFragment newInstance(Recipe recipe) {
+    public static RecipeStepsFragment newInstance(Recipe recipe, int position) {
         RecipeStepsFragment fragment = new RecipeStepsFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_RECIPE, recipe);
+        args.putInt(ARG_POSITION, position);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,6 +56,7 @@ public class RecipeStepsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mRecipe = getArguments().getParcelable(ARG_RECIPE);
+            mPosition = getArguments().getInt(ARG_POSITION);
             getIngredients();
         }
     }
@@ -63,9 +68,6 @@ public class RecipeStepsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
 
         // Set up Bottom Sheet
-        final View bottomSheetView = rootView.findViewById(R.id.bottom_sheet);
-        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView);
-        final Button ingredientsButton = (Button) rootView.findViewById(R.id.btn_ingredients);
         final TextView ingredientsTextView = (TextView) rootView.findViewById(R.id.tv_ingredients);
         ingredientsTextView.setText(mIngredientsText);
 
@@ -88,18 +90,9 @@ public class RecipeStepsFragment extends Fragment {
         if (actionBar != null)
             actionBar.setTitle(mRecipe.getName());
 
-        // Set up a click listener on ingredients button to expand/collapse sheet
-        ingredientsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
-                } else {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
-            }
-        });
+        // Change toolbar image based on recipe
+        ((ImageView) rootView.findViewById(R.id.img_toolbar)).setImageResource(
+                Utility.getRecipeImageResource(mPosition));
 
         return rootView;
     }

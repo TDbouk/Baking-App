@@ -20,9 +20,11 @@ public class RecipeStepsActivity extends AppCompatActivity implements RecipeStep
             FragmentManager mFragmentManager = getSupportFragmentManager();
 
             Intent callingIntent = getIntent();
-            if (callingIntent != null && callingIntent.hasExtra("recipe")) {
+            if (callingIntent != null && callingIntent.hasExtra("recipe")
+                    && callingIntent.hasExtra("position")) {
                 Recipe recipe = callingIntent.getParcelableExtra("recipe");
-                RecipeStepsFragment fragment = RecipeStepsFragment.newInstance(recipe);
+                int position = callingIntent.getIntExtra("position", 0);
+                RecipeStepsFragment fragment = RecipeStepsFragment.newInstance(recipe, position);
                 mFragmentManager.beginTransaction().add(R.id.detail_container, fragment).commit();
             }
         }

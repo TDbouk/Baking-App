@@ -88,9 +88,9 @@ public class RecipeFragment extends Fragment {
         return rooView;
     }
 
-    public void onButtonPressed(Recipe recipe) {
+    public void onButtonPressed(Recipe recipe, int position) {
         if (mListener != null) {
-            mListener.onRecipeFragmentInteraction(recipe);
+            mListener.onRecipeFragmentInteraction(recipe, position);
         }
     }
 
@@ -112,7 +112,7 @@ public class RecipeFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void onRecipeFragmentInteraction(Recipe recipe);
+        void onRecipeFragmentInteraction(Recipe recipe, int position);
     }
 
     class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
@@ -164,7 +164,7 @@ public class RecipeFragment extends Fragment {
                     final int position = vh.getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         Recipe r = mRecipes.get(position);
-                        onButtonPressed(r);
+                        onButtonPressed(r, position);
                     }
                 }
             });

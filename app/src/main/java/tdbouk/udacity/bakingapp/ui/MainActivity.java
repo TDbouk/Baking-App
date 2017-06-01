@@ -17,10 +17,11 @@ public class MainActivity extends AppCompatActivity implements RecipeFragment.On
     }
 
     @Override
-    public void onRecipeFragmentInteraction(Recipe recipe) {
+    public void onRecipeFragmentInteraction(Recipe recipe, int position) {
 
         Intent recipeSteps = new Intent(this, RecipeStepsActivity.class);
         recipeSteps.putExtra("recipe", recipe);
+        recipeSteps.putExtra("position", position);
         startActivity(recipeSteps);
 
     }

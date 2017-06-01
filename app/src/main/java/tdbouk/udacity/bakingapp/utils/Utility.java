@@ -86,7 +86,7 @@ public class Utility {
      */
     public static int getRecipeImageResource(int position) {
         int recipeResources[] = new int[]{R.drawable.ic_recipe_1, R.drawable.ic_recipe_2,
-                R.drawable.ic_recipe_2, R.drawable.ic_recipe_4,};
+                R.drawable.ic_recipe_3, R.drawable.ic_recipe_4,};
 
         if (position >= 0 && position < recipeResources.length)
             return recipeResources[position];
