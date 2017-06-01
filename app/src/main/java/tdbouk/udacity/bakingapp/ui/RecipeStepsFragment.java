@@ -118,9 +118,9 @@ public class RecipeStepsFragment extends Fragment {
         }
     }
 
-    public void onButtonPressed(Step step) {
+    public void onButtonPressed(Recipe recipe, int stepNumber) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(step);
+            mListener.onFragmentInteraction(recipe, stepNumber);
         }
     }
 
@@ -152,7 +152,7 @@ public class RecipeStepsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Step step);
+        void onFragmentInteraction(Recipe recipe, int stepNumber);
     }
 
     class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.ViewHolder> {
@@ -171,12 +171,6 @@ public class RecipeStepsFragment extends Fragment {
             mRecipe = recipe;
         }
 
-        void swapAdapter(Recipe recipe) {
-            if (recipe == null || recipe.getIngredients().size() == 0) return;
-            mRecipe = recipe;
-            notifyDataSetChanged();
-        }
-
         // Create new views (invoked by the layout manager)
         @Override
         public RecipeStepsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
@@ -193,8 +187,7 @@ public class RecipeStepsFragment extends Fragment {
 
                     final int position = vh.getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        Step s = mRecipe.getSteps().get(position);
-                        onButtonPressed(s);
+                        onButtonPressed(mRecipe, position);
                     }
                 }
             });

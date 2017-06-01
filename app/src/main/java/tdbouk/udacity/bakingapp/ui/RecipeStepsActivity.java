@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
-import tdbouk.udacity.bakingapp.data.Step;
 
 public class RecipeStepsActivity extends AppCompatActivity implements RecipeStepsFragment.OnFragmentInteractionListener {
 
@@ -30,7 +29,10 @@ public class RecipeStepsActivity extends AppCompatActivity implements RecipeStep
     }
 
     @Override
-    public void onFragmentInteraction(Step step) {
+    public void onFragmentInteraction(Recipe recipe, int stepNumber) {
 
+        startActivity(new Intent(this, StepActivity.class)
+                .putExtra("recipe", recipe)
+                .putExtra("step_number", stepNumber));
     }
 }
