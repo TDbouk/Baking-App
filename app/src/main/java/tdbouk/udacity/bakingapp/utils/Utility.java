@@ -38,7 +38,7 @@ public class Utility {
                     // get recipe ingredient object
                     JSONObject ingredientsJsonObject = ingredientsJsonArray.getJSONObject(j);
                     ingredient = new Ingredient();
-                    ingredient.setQuantity(ingredientsJsonObject.getInt(Constants.JSON_INGREDIENT_QUANTITY));
+                    ingredient.setQuantity(ingredientsJsonObject.getDouble(Constants.JSON_INGREDIENT_QUANTITY));
                     ingredient.setMeasure(ingredientsJsonObject.getString(Constants.JSON_INGREDIENT_MEASURE));
                     ingredient.setIngredient(ingredientsJsonObject.getString(Constants.JSON_INGREDIENT_NAME));
 
