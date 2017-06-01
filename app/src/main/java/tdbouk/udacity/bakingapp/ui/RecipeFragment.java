@@ -188,6 +188,8 @@ public class RecipeFragment extends Fragment {
             holder.recipeIngredients.setText(mContext.getString(
                     R.string.title_ingredients, recipe.getIngredients().size()));
 
+            holder.recipeImage.setImageResource(Utility.getRecipeImageResource(position));
+
             // set content description based on recipe's name
             holder.recipeImage.setContentDescription(mContext.getString(
                     R.string.cd_recipe, recipe.getName()));

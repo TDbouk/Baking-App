@@ -7,12 +7,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Ingredient;
 import tdbouk.udacity.bakingapp.data.Recipe;
 import tdbouk.udacity.bakingapp.data.Step;
 
 public class Utility {
 
+    /**
+     * Parse Json string to get the recipe info
+     *
+     * @param recipesJson
+     * @return ArrayList of Recipes
+     */
     public static ArrayList<Recipe> parseRecipeJson(JSONArray recipesJson) {
 
         List<Recipe> recipes = new ArrayList<>();
@@ -72,4 +79,18 @@ public class Utility {
         return (ArrayList<Recipe>) recipes;
     }
 
+    /**
+     * Return recipe image resource based on position in recycler view
+     * @param position
+     * @return Resource ID - int
+     */
+    public static int getRecipeImageResource(int position) {
+        int recipeResources[] = new int[]{R.drawable.ic_recipe_1, R.drawable.ic_recipe_2,
+                R.drawable.ic_recipe_2, R.drawable.ic_recipe_4,};
+
+        if (position >= 0 && position < recipeResources.length)
+            return recipeResources[position];
+
+        return 0;
+    }
 }
