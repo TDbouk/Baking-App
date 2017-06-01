@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -80,6 +82,11 @@ public class RecipeStepsFragment extends Fragment {
 
         // Set the Recycler View's data
         recyclerView.setAdapter(mAdapter);
+
+        // Change actionbar title to recipe name
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null)
+            actionBar.setTitle(mRecipe.getName());
 
         // Set up a click listener on ingredients button to expand/collapse sheet
         ingredientsButton.setOnClickListener(new View.OnClickListener() {
