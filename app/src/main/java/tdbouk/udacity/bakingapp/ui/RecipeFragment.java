@@ -80,7 +80,7 @@ public class RecipeFragment extends Fragment {
         View rooView = inflater.inflate(R.layout.fragment_recipe, container, false);
 
         mRecyclerView = (RecyclerView) rooView.findViewById(R.id.rv_recipes);
-        mGridManager = new GridLayoutManager(getActivity(), 2);
+        mGridManager = new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.grid_view_columns));
         mAdapter = new RecipesAdapter(getActivity(), null);
         mRecyclerView.setLayoutManager(mGridManager);
         mRecyclerView.setAdapter(mAdapter);

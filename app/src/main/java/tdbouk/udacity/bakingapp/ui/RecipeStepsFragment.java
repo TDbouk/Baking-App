@@ -3,15 +3,12 @@ package tdbouk.udacity.bakingapp.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import tdbouk.udacity.bakingapp.R;
@@ -64,12 +61,18 @@ public class RecipeStepsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
 
-        // Set up Bottom Sheet
-        final TextView ingredientsTextView = (TextView) rootView.findViewById(R.id.tv_ingredients);
-        ingredientsTextView.setText(mIngredientsText);
+        // Set up Bottom Sheet Text
+        setIngredientsText(mIngredientsText);
+
+        // Change actionbar title to recipe name
+        setActionBarTitle(mRecipe.getName());
+
+        // Change toolbar image based on recipe
+        setToolBarImage(Utility.getRecipeImageResource(mPosition));
 
         // Set up Recycler View
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_steps);
@@ -84,15 +87,6 @@ public class RecipeStepsFragment extends Fragment {
 
         // Set the Recycler View's data
         recyclerView.setAdapter(mAdapter);
-
-        // Change actionbar title to recipe name
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null)
-            actionBar.setTitle(mRecipe.getName());
-
-        // Change toolbar image based on recipe
-        ((ImageView) rootView.findViewById(R.id.img_toolbar)).setImageResource(
-                Utility.getRecipeImageResource(mPosition));
 
         return rootView;
     }
@@ -114,6 +108,24 @@ public class RecipeStepsFragment extends Fragment {
     public void onButtonPressed(Recipe recipe, int stepNumber) {
         if (mListener != null) {
             mListener.onFragmentInteraction(recipe, stepNumber);
+        }
+    }
+
+    public void setIngredientsText(String text) {
+        if (mListener != null) {
+            mListener.onSetIngredientsText(text);
+        }
+    }
+
+    public void setActionBarTitle(String title) {
+        if (mListener != null) {
+            mListener.onSetActionBarTitle(title);
+        }
+    }
+
+    public void setToolBarImage(int resource) {
+        if (mListener != null) {
+            mListener.onSetToolBarImage(resource);
         }
     }
 
@@ -146,6 +158,12 @@ public class RecipeStepsFragment extends Fragment {
      */
     interface OnFragmentInteractionListener {
         void onFragmentInteraction(Recipe recipe, int stepNumber);
+
+        void onSetIngredientsText(String text);
+
+        void onSetActionBarTitle(String text);
+
+        void onSetToolBarImage(int resource);
     }
 
     class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.ViewHolder> {

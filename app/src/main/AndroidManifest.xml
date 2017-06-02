@@ -19,13 +19,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.RecipeStepsActivity" />
-        <activity android:name=".ui.StepActivity"></activity>
+        <activity android:name=".ui.StepActivity" />
 
         <receiver android:name=".ui.StepFragment$MediaReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

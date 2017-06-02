@@ -2,40 +2,67 @@ package tdbouk.udacity.bakingapp.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
 
-public class StepActivity extends AppCompatActivity {
+public class StepActivity extends Fragment {
+
+    private static final String ARG_RECIPE = "recipe";
+    private static final String ARG_STEP_NUMBER = "step_number";
 
     ViewPager mPager;
     MyAdapter mAdapter;
     Recipe mRecipe;
     int mStepNumber = 0;
 
+    public static StepActivity newInstance(Recipe recipe, int stepNumber) {
+        StepActivity fragment = new StepActivity();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_RECIPE, recipe);
+        args.putInt(ARG_STEP_NUMBER, stepNumber);
+        args.putInt(ARG_STEP_NUMBER, stepNumber);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_step);
+        if (getArguments() != null) {
+            mRecipe = getArguments().getParcelable(ARG_RECIPE);
+            mStepNumber = getArguments().getInt(ARG_STEP_NUMBER);
+        }
+    }
 
-        mAdapter = new MyAdapter(getSupportFragmentManager());
-        mPager = (ViewPager) findViewById(R.id.pager);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_step, container, false);
 
-        Intent callingIntent = getIntent();
+        mAdapter = new MyAdapter(getActivity().getSupportFragmentManager());
+        mPager = (ViewPager) rootView.findViewById(R.id.pager);
+
+     /*   Intent callingIntent = getActivity().getIntent();
         if (callingIntent != null && callingIntent.hasExtra("recipe")
                 && callingIntent.hasExtra("step_number")) {
             mRecipe = callingIntent.getParcelableExtra("recipe");
             mStepNumber = callingIntent.getIntExtra("step_number", 0);
-        }
+        }*/
         mPager.setAdapter(mAdapter);
 
         // set pager item to the step selected by the user
         mPager.setCurrentItem(mStepNumber);
+        return rootView;
     }
 
     private class MyAdapter extends FragmentStatePagerAdapter {
