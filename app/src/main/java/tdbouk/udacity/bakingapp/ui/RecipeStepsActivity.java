@@ -17,7 +17,6 @@ import tdbouk.udacity.bakingapp.data.Recipe;
 public class RecipeStepsActivity extends AppCompatActivity implements
         RecipeStepsFragment.OnFragmentInteractionListener {
 
-    private boolean mTowPane;
     private TextView mIngredientsTextView;
 
     @Override
@@ -56,24 +55,22 @@ public class RecipeStepsActivity extends AppCompatActivity implements
                 int position = callingIntent.getIntExtra("position", 0);
                 RecipeStepsFragment fragment = RecipeStepsFragment.newInstance(recipe, position);
                 mFragmentManager.beginTransaction().add(R.id.steps_main_container, fragment).commit();
-
-
             }
-
         }
     }
 
-
     @Override
     public void onFragmentInteraction(Recipe recipe, int stepNumber) {
+        // Add the view to the detail fragment in 2 pane mode
         if (getResources().getBoolean(R.bool.has_two_panes)) {
-            StepActivity fragment = StepActivity.newInstance(recipe, stepNumber);
+            StepFragment fragment = StepFragment.newInstance(recipe, stepNumber);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.steps_detail_container, fragment)
                     .commit();
 
         } else {
-            startActivity(new Intent(this, StepActivity.class)
+            // Start a new Activity
+            startActivity(new Intent(this, DetailActivity.class)
                     .putExtra("recipe", recipe)
                     .putExtra("step_number", stepNumber));
         }
