@@ -1,5 +1,9 @@
 package tdbouk.udacity.bakingapp.utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,6 +85,7 @@ public class Utility {
 
     /**
      * Return recipe image resource based on position in recycler view
+     *
      * @param position
      * @return Resource ID - int
      */
@@ -92,5 +97,25 @@ public class Utility {
             return recipeResources[position];
 
         return 0;
+    }
+
+    /**
+     * Save the last viewed recipe Id in shared preferences
+     * @param context Context
+     * @param id Recipe Id
+     */
+    public static void saveLastViewdRecipeId(Context context, int id) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putInt(QuickPreferences.LAST_VIEWED_RECIPE, id).apply();
+    }
+
+    /**
+     * Get the last viewed recipe Id from shared preferences
+     * @param context Context
+     * @return Recipe Id - Int
+     */
+    public static int getLastViewdRecipeId(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getInt(QuickPreferences.LAST_VIEWED_RECIPE, 1);
     }
 }

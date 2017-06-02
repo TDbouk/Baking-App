@@ -165,6 +165,9 @@ public class RecipeFragment extends Fragment {
                     if (position != RecyclerView.NO_POSITION) {
                         Recipe r = mRecipes.get(position);
                         onButtonPressed(r, position);
+
+                        // Save id if recipe in shared preferences
+                        Utility.saveLastViewdRecipeId(getActivity(), r.getId());
                     }
                 }
             });
