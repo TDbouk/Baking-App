@@ -2,6 +2,7 @@ package tdbouk.udacity.bakingapp.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ public class RecipeStepsFragment extends Fragment {
     private static final String ARG_RECIPE = "recipe";
     private static final String ARG_POSITION = "position";
 
+    private RecyclerView mRecyclerView;
     private Recipe mRecipe;
     private int mPosition;
     private OnFragmentInteractionListener mListener;
@@ -61,7 +63,7 @@ public class RecipeStepsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
 
@@ -75,18 +77,18 @@ public class RecipeStepsFragment extends Fragment {
         setToolBarImage(Utility.getRecipeImageResource(mPosition));
 
         // Set up Recycler View
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_steps);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_steps);
         LinearLayoutManager linearManager = new LinearLayoutManager(getActivity());
         RecipeStepsAdapter mAdapter = new RecipeStepsAdapter(getActivity(), mRecipe);
-        recyclerView.setLayoutManager(linearManager);
+        mRecyclerView.setLayoutManager(linearManager);
 
         // Add a divider between items of Recycler View
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 linearManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         // Set the Recycler View's data
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
 
         return rootView;
     }
@@ -127,6 +129,27 @@ public class RecipeStepsFragment extends Fragment {
         if (mListener != null) {
             mListener.onSetToolBarImage(resource);
         }
+    }
+
+    /**
+     * Select the first item as a default item in 2 pane mode
+     */
+    public void setDefaultView() {
+        // delay the operation until the view is created and initialized
+        // by the adapter
+        mRecyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerView.findViewHolderForAdapterPosition(0).itemView.performClick();
+            }
+        }, 400);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (getResources().getBoolean(R.bool.has_two_panes))
+            setDefaultView();
     }
 
     @Override
