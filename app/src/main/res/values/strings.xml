@@ -13,6 +13,6 @@
     <string name="play">Play</string>
     <string name="restart">Restart</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_widget">Add widget</string>
+    <string name="empty_widget">No recent recipes to show.</string>
 </resources>

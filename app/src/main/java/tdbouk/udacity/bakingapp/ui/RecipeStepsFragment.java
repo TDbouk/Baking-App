@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import tdbouk.udacity.bakingapp.R;
-import tdbouk.udacity.bakingapp.data.Ingredient;
 import tdbouk.udacity.bakingapp.data.Recipe;
 import tdbouk.udacity.bakingapp.data.Step;
 import tdbouk.udacity.bakingapp.utils.Utility;
@@ -93,16 +92,11 @@ public class RecipeStepsFragment extends Fragment {
         return rootView;
     }
 
-    /**
-     * Create a string from all ingredients on a recipe
-     * by concatenating all ingredients together separated
-     * by a new line.
-     */
-    private void getIngredients() {
-        if (mRecipe != null && mRecipe.getIngredients() != null) {
-            for (Ingredient in : mRecipe.getIngredients()) {
-                mIngredientsText = mIngredientsText.concat(in.getIngredient()
-                        + " x " + in.getQuantity() + " " + in.getMeasure()) + "\n";
+    public void getIngredients() {
+        if (mRecipe != null && mRecipe.getIngredients().size() > 0) {
+            for (int i = 0; i < mRecipe.getIngredients().size(); i++) {
+                mIngredientsText = mIngredientsText.concat(
+                        Utility.formatIngredients(mRecipe.getIngredients().get(i)));
             }
         }
     }

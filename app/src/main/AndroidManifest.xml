@@ -19,7 +19,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.RecipeStepsActivity" />
-        <activity android:name=".ui.StepFragment" />
 
         <receiver android:name=".ui.StepPageFragment$MediaReceiver">
             <intent-filter>
@@ -27,7 +26,23 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.DetailActivity"></activity>
+        <activity android:name=".ui.DetailActivity" />
+
+        <receiver android:name=".widget.RecentlyViewedRecipeWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="tdbouk.udacity.bakingapp.ACTION_RECENT_RECIPE_UPDATED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recently_viewed_recipe_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".widget.DetailWidgetRemoteViewsService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

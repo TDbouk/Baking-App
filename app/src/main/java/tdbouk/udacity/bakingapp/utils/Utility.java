@@ -86,7 +86,7 @@ public class Utility {
     /**
      * Return recipe image resource based on position in recycler view
      *
-     * @param position
+     * @param position position in list
      * @return Resource ID - int
      */
     public static int getRecipeImageResource(int position) {
@@ -100,22 +100,49 @@ public class Utility {
     }
 
     /**
-     * Save the last viewed recipe Id in shared preferences
+     * Save the last viewed recipe's ingredients in shared preferences
+     *
      * @param context Context
-     * @param id Recipe Id
+     * @param recipe  Recipe
      */
-    public static void saveLastViewdRecipeId(Context context, int id) {
+    public static void saveLastViewedRecipeId(Context context, Recipe recipe) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        prefs.edit().putInt(QuickPreferences.LAST_VIEWED_RECIPE, id).apply();
+        if (recipe != null && recipe.getIngredients().size() > 0) {
+            for (int i = 0; i < recipe.getIngredients().size(); i++) {
+                prefs.edit().putString(QuickPreferences.LAST_VIEWED_RECIPE + "_" + i,
+                        formatIngredients(recipe.getIngredients().get(i))).apply();
+            }
+            prefs.edit().putInt(QuickPreferences.NUMBER_OF_INGREDIENTS,
+                    recipe.getIngredients().size()).apply();
+        }
     }
 
     /**
-     * Get the last viewed recipe Id from shared preferences
+     * Get the last viewed recipe's Ingredients from shared preferences
+     *
      * @param context Context
-     * @return Recipe Id - Int
+     * @return ArrayList of strings containing all ingredients of recipe
      */
-    public static int getLastViewdRecipeId(Context context) {
+    public static ArrayList<String> getLastViewedRecipeId(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getInt(QuickPreferences.LAST_VIEWED_RECIPE, 1);
+        ArrayList<String> ingredients = new ArrayList<>();
+        final int numberOfIngredients = prefs.getInt(QuickPreferences.NUMBER_OF_INGREDIENTS, 0);
+        for (int i = 0; i < numberOfIngredients; i++) {
+            ingredients.add(prefs.getString(QuickPreferences.LAST_VIEWED_RECIPE + "_" + i, ""));
+        }
+        return ingredients;
+    }
+
+    /**
+     * Format ingredients into 1 string
+     *
+     * @param ingredient
+     * @return String as follows (ingredients - quantity - measure)
+     */
+    public static String formatIngredients(Ingredient ingredient) {
+        return ingredient.getIngredient()
+                + " x " + ingredient.getQuantity() + " "
+                + ingredient.getMeasure();
     }
 }
+

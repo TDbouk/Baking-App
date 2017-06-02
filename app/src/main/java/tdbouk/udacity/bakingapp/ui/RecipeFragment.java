@@ -1,6 +1,7 @@
 package tdbouk.udacity.bakingapp.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -167,7 +168,11 @@ public class RecipeFragment extends Fragment {
                         onButtonPressed(r, position);
 
                         // Save id if recipe in shared preferences
-                        Utility.saveLastViewdRecipeId(getActivity(), r.getId());
+                        Utility.saveLastViewedRecipeId(getActivity(), r);
+
+                        // Notify that a recent viewed recipe changed
+                        getActivity().sendBroadcast(new Intent(Constants.ACTION_RECENT_RECIPE_UPDATED)
+                                .setPackage(getActivity().getPackageName()));
                     }
                 }
             });

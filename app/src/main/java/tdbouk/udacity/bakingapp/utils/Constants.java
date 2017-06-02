@@ -28,4 +28,9 @@ public class Constants {
     public static final String JSON_STEP_DESCRIPTION = "description";
     public static final String JSON_STEP_VIDEO_URL = "videoURL";
     public static final String JSON_STEP_THUMBNAIL_URL = "thumbnailURL";
+
+    // Intent Action used to notify that a recent recipe has been chnaged
+    public static final String ACTION_RECENT_RECIPE_UPDATED =
+            "tdbouk.udacity.bakingapp.ACTION_RECENT_RECIPE_UPDATED";
 }
+
