@@ -165,6 +165,7 @@ public class RecipeFragment extends Fragment {
                     final int position = vh.getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         Recipe r = mRecipes.get(position);
+                        r.setPositionInGridView(position);
                         onButtonPressed(r, position);
 
                         // Save id if recipe in shared preferences

@@ -69,11 +69,14 @@ public class RecipeStepsFragment extends Fragment {
         // Set up Bottom Sheet Text
         setIngredientsText(mIngredientsText);
 
-        // Change actionbar title to recipe name
-        setActionBarTitle(mRecipe.getName());
+        // Collapsing Toolbar is present in this UI only in phones
+        if (!getResources().getBoolean(R.bool.has_two_panes)) {
+            // Change actionbar title to recipe name
+            setActionBarTitle(mRecipe.getName());
 
-        // Change toolbar image based on recipe
-        setToolBarImage(Utility.getRecipeImageResource(mPosition));
+            // Change toolbar image based on recipe
+            setToolBarImage(Utility.getRecipeImageResource(mPosition));
+        }
 
         // Set up Recycler View
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_steps);

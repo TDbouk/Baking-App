@@ -6,12 +6,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
+import tdbouk.udacity.bakingapp.utils.Utility;
 
 public class StepFragment extends Fragment {
 
@@ -27,7 +31,6 @@ public class StepFragment extends Fragment {
         StepFragment fragment = new StepFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_RECIPE, recipe);
-        args.putInt(ARG_STEP_NUMBER, stepNumber);
         args.putInt(ARG_STEP_NUMBER, stepNumber);
         fragment.setArguments(args);
         return fragment;
@@ -55,7 +58,26 @@ public class StepFragment extends Fragment {
 
         // set pager item to the step selected by the user
         mPager.setCurrentItem(mStepNumber);
+
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // Set toolbar image on screen orientation change
+        setToolBarImage(Utility.getRecipeImageResource(mRecipe.getPositionInGridView()));
+    }
+
+    private void setActionBarTitle(String text) {
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null)
+            actionBar.setTitle(text);
+    }
+
+    private void setToolBarImage(int resource) {
+        ((ImageView) getActivity().findViewById(R.id.img_toolbar)).setImageResource(resource);
     }
 
     private class MyAdapter extends FragmentStatePagerAdapter {
@@ -71,8 +93,9 @@ public class StepFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
+            setActionBarTitle(mRecipe.getName());
+            setToolBarImage(Utility.getRecipeImageResource(mRecipe.getPositionInGridView()));
             return StepPageFragment.newInstance(mRecipe, position);
         }
     }
-
 }
