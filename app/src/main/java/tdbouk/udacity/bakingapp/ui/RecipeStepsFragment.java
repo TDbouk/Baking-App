@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,11 +23,17 @@ public class RecipeStepsFragment extends Fragment {
     private static final String ARG_RECIPE = "recipe";
     private static final String ARG_POSITION = "position";
 
+    private final String EXTRA_SELECTED_ITEM_INDEX = "selected_item_index";
+    private final String EXTRA_LIST_STATE = "list_state";
+
     private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLinearManager;
     private Recipe mRecipe;
     private int mPosition;
     private OnFragmentInteractionListener mListener;
     private String mIngredientsText = "";
+    private int mLastSelectedListIndex = RecyclerView.NO_POSITION;
+    private int[] mListState;
 
     public RecipeStepsFragment() {
         // Required empty public constructor
@@ -47,6 +54,21 @@ public class RecipeStepsFragment extends Fragment {
         args.putInt(ARG_POSITION, position);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // save last selected list item index
+        outState.putInt(EXTRA_SELECTED_ITEM_INDEX, mLastSelectedListIndex);
+
+        // save list state
+        View startView = mRecyclerView.getChildAt(0);
+        int topView = (startView == null) ? 0 : (startView.getTop() - mRecyclerView.getPaddingTop());
+        mListState = new int[]{mLinearManager.findFirstVisibleItemPosition(), topView};
+        outState.putIntArray(EXTRA_LIST_STATE, mListState);
+
+        super.onSaveInstanceState(outState);
+
     }
 
     @Override
@@ -80,17 +102,32 @@ public class RecipeStepsFragment extends Fragment {
 
         // Set up Recycler View
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_steps);
-        LinearLayoutManager linearManager = new LinearLayoutManager(getActivity());
+        mLinearManager = new LinearLayoutManager(getActivity());
         RecipeStepsAdapter mAdapter = new RecipeStepsAdapter(getActivity(), mRecipe);
-        mRecyclerView.setLayoutManager(linearManager);
+        mRecyclerView.setLayoutManager(mLinearManager);
 
         // Add a divider between items of Recycler View
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
-                linearManager.getOrientation());
+                mLinearManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         // Set the Recycler View's data
         mRecyclerView.setAdapter(mAdapter);
+
+        // restore list state
+        if (savedInstanceState != null) {
+            mListState = savedInstanceState.getIntArray(EXTRA_LIST_STATE);
+            mLastSelectedListIndex = savedInstanceState.getInt(EXTRA_SELECTED_ITEM_INDEX);
+            if (mListState != null) {
+                mRecyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                                .scrollToPositionWithOffset(mListState[0], 0);
+                    }
+                });
+            }
+        }
 
         return rootView;
     }
@@ -145,7 +182,8 @@ public class RecipeStepsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getResources().getBoolean(R.bool.has_two_panes))
+        if (savedInstanceState == null &&
+                getResources().getBoolean(R.bool.has_two_panes))
             setDefaultView();
     }
 
@@ -219,6 +257,23 @@ public class RecipeStepsFragment extends Fragment {
                     final int position = vh.getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         onButtonPressed(mRecipe, position);
+
+                        // find previous selected item and remove its selected state
+                        if (mLastSelectedListIndex != RecyclerView.NO_POSITION) {
+                            ViewHolder prevView = (ViewHolder) mRecyclerView.findViewHolderForAdapterPosition(mLastSelectedListIndex);
+                            if (prevView != null)
+                                prevView.mRecipeShortDescription.setBackgroundColor(
+                                        ContextCompat.getColor(getActivity(), android.R.color.white));
+                        }
+
+                        // save selected index
+                        mLastSelectedListIndex = position;
+
+                        // set color of selected item
+                        ViewHolder newView = (ViewHolder) mRecyclerView.findViewHolderForAdapterPosition(mLastSelectedListIndex);
+                        if (newView != null)
+                            newView.mRecipeShortDescription.setBackgroundColor(
+                                    ContextCompat.getColor(getActivity(), R.color.colorAccent));
                     }
                 }
             });
@@ -235,6 +290,15 @@ public class RecipeStepsFragment extends Fragment {
 
             // Set the views
             holder.mRecipeShortDescription.setText(step.getShortDescription());
+
+            // Set selected state of items
+            if (mLastSelectedListIndex != position)
+                holder.mRecipeShortDescription.setBackgroundColor(
+                        ContextCompat.getColor(getActivity(), android.R.color.white));
+            else {
+                holder.mRecipeShortDescription.setBackgroundColor(
+                        ContextCompat.getColor(getActivity(), R.color.colorAccent));
+            }
         }
 
         // Return the size of dataset (invoked by the layout manager)
