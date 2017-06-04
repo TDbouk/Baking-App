@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
+import tdbouk.udacity.bakingapp.idlingResource.SimpleIdlingResource;
 import tdbouk.udacity.bakingapp.utils.Constants;
 import tdbouk.udacity.bakingapp.utils.Utility;
 
@@ -41,7 +42,6 @@ public class RecipeFragment extends Fragment {
     public RecipeFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,13 @@ public class RecipeFragment extends Fragment {
                         // Swap adapter's data
                         if (mReceipes != null)
                             mAdapter.swapAdapter(mReceipes);
+
+                        SimpleIdlingResource simpleIdlingResource =
+                                ((MainActivity) getActivity()).getSimpleIdlingResource();
+
+                        if (simpleIdlingResource != null) {
+                            simpleIdlingResource.setIdleState(true);
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
