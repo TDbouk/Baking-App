@@ -153,7 +153,7 @@ public class RecipeStepsFragment extends Fragment {
         if (mRecipe != null && mRecipe.getIngredients().size() > 0) {
             for (int i = 0; i < mRecipe.getIngredients().size(); i++) {
                 mIngredientsText = mIngredientsText.concat(
-                        Utility.formatIngredients(mRecipe.getIngredients().get(i)));
+                        Utility.formatIngredients(mRecipe.getIngredients().get(i)) + "\n");
             }
         }
     }
