@@ -16,7 +16,6 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,14 +91,16 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (!isVisibleToUser) {
-            // Pause Video when pagers fragment changes
-            if (mExoPlayer != null)
-                mExoPlayer.setPlayWhenReady(false);
-        } else {
-            // Resume Video once the fragment is visible again
-            if (mExoPlayer != null)
-                mExoPlayer.setPlayWhenReady(true);
+        if (this.isVisible()) {
+            if (!isVisibleToUser) {
+                // Pause Video when pagers fragment changes
+                if (mExoPlayer != null)
+                    mExoPlayer.setPlayWhenReady(false);
+            } else {
+                // Resume Video once the fragment is visible again
+                if (mExoPlayer != null)
+                    mExoPlayer.setPlayWhenReady(true);
+            }
         }
     }
 
@@ -175,9 +176,14 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
         MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                 getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
 
-        // Play video automatically when ready
+        // Load up the media source
+        // and start playing if the fragment is visible
+        // the checking is necessary because the view pager adapter
+        // keeps pages to the left and right loaded
         mExoPlayer.prepare(mediaSource);
-        mExoPlayer.setPlayWhenReady(true);
+        if (this.getUserVisibleHint())
+            mExoPlayer.setPlayWhenReady(true);
+
     }
 
     /**
