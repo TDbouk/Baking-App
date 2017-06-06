@@ -13,9 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
 import tdbouk.udacity.bakingapp.data.Step;
+import tdbouk.udacity.bakingapp.events.ViewPagerEvent;
 import tdbouk.udacity.bakingapp.utils.Utility;
 
 
@@ -37,6 +42,18 @@ public class RecipeStepsFragment extends Fragment {
 
     public RecipeStepsFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 
     /**
@@ -224,6 +241,32 @@ public class RecipeStepsFragment extends Fragment {
         void onSetToolBarImage(int resource);
     }
 
+    private void setSelectedIndexState(final int position) {
+        // find previous selected item and remove its selected state
+        if (mLastSelectedListIndex != RecyclerView.NO_POSITION) {
+            RecipeStepsAdapter.ViewHolder prevView = (RecipeStepsAdapter.ViewHolder) mRecyclerView.findViewHolderForAdapterPosition(mLastSelectedListIndex);
+            if (prevView != null)
+                prevView.mRecipeShortDescription.setBackgroundColor(
+                        ContextCompat.getColor(getActivity(), android.R.color.white));
+        }
+        // save selected index
+        mLastSelectedListIndex = position;
+
+        // set color of selected item
+        RecipeStepsAdapter.ViewHolder newView = (RecipeStepsAdapter.ViewHolder) mRecyclerView
+                .findViewHolderForAdapterPosition(mLastSelectedListIndex);
+        if (newView != null)
+            newView.mRecipeShortDescription.setBackgroundColor(
+                    ContextCompat.getColor(getActivity(), R.color.colorAccent));
+    }
+
+    // This method will be called when a MessageEvent is posted
+    // Change selected item
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ViewPagerEvent event) {
+        setSelectedIndexState(event.position);
+    }
+
     class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.ViewHolder> {
         private Recipe mRecipe;
 
@@ -257,23 +300,7 @@ public class RecipeStepsFragment extends Fragment {
                     final int position = vh.getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         onButtonPressed(mRecipe, position);
-
-                        // find previous selected item and remove its selected state
-                        if (mLastSelectedListIndex != RecyclerView.NO_POSITION) {
-                            ViewHolder prevView = (ViewHolder) mRecyclerView.findViewHolderForAdapterPosition(mLastSelectedListIndex);
-                            if (prevView != null)
-                                prevView.mRecipeShortDescription.setBackgroundColor(
-                                        ContextCompat.getColor(getActivity(), android.R.color.white));
-                        }
-
-                        // save selected index
-                        mLastSelectedListIndex = position;
-
-                        // set color of selected item
-                        ViewHolder newView = (ViewHolder) mRecyclerView.findViewHolderForAdapterPosition(mLastSelectedListIndex);
-                        if (newView != null)
-                            newView.mRecipeShortDescription.setBackgroundColor(
-                                    ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                        setSelectedIndexState(position);
                     }
                 }
             });

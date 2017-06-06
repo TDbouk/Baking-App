@@ -27,11 +27,6 @@ public class MainActivity extends AppCompatActivity implements RecipeFragment.On
         return mSimpleIdlingResource;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
     public SimpleIdlingResource getSimpleIdlingResource() {
         return mSimpleIdlingResource;
     }
@@ -41,12 +36,10 @@ public class MainActivity extends AppCompatActivity implements RecipeFragment.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        System.out.println("ONCREATE METHOD CALLED");
         if (mSimpleIdlingResource == null) {
             mSimpleIdlingResource = new SimpleIdlingResource();
             mSimpleIdlingResource.setIdleState(false);
         }
-        System.out.println("SETTINGD IDE STATE TO FALSE: " + mSimpleIdlingResource.isIdleNow());
     }
 
     @Override

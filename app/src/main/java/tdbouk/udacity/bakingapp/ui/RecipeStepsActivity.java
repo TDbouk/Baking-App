@@ -11,8 +11,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
+import tdbouk.udacity.bakingapp.events.ViewPagerEvent;
 
 public class RecipeStepsActivity extends AppCompatActivity implements
         RecipeStepsFragment.OnFragmentInteractionListener {

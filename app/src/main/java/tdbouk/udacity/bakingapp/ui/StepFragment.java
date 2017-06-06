@@ -13,8 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
+import tdbouk.udacity.bakingapp.events.ViewPagerEvent;
 import tdbouk.udacity.bakingapp.utils.Utility;
 
 public class StepFragment extends Fragment {
@@ -59,6 +62,24 @@ public class StepFragment extends Fragment {
         // set pager item to the step selected by the user
         mPager.setCurrentItem(mStepNumber);
 
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                // Method called only in tablets to change selected item position
+                setSelectedItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         return rootView;
     }
 
@@ -78,6 +99,13 @@ public class StepFragment extends Fragment {
 
     private void setToolBarImage(int resource) {
         ((ImageView) getActivity().findViewById(R.id.img_toolbar)).setImageResource(resource);
+    }
+
+    // Notify Master layout in 2-pane layouts to modify
+    // Selected item by firing an event
+    public void setSelectedItem(int position) {
+        if (getActivity().getResources().getBoolean(R.bool.has_two_panes))
+            EventBus.getDefault().post(new ViewPagerEvent(position));
     }
 
     private class MyAdapter extends FragmentStatePagerAdapter {
