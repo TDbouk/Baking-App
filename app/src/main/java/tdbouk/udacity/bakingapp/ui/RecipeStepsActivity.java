@@ -1,6 +1,7 @@
 package tdbouk.udacity.bakingapp.ui;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
@@ -11,13 +12,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
-import tdbouk.udacity.bakingapp.events.ViewPagerEvent;
 
 public class RecipeStepsActivity extends AppCompatActivity implements
         RecipeStepsFragment.OnFragmentInteractionListener {
@@ -62,6 +58,10 @@ public class RecipeStepsActivity extends AppCompatActivity implements
                 mFragmentManager.beginTransaction().add(R.id.steps_main_container, fragment).commit();
             }
         }
+
+        // Allow only landscape orientation on tablets
+        if (getResources().getBoolean(R.bool.has_two_panes))
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     @Override
