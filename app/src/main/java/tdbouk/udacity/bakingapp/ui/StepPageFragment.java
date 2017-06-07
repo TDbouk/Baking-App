@@ -16,6 +16,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,7 +122,7 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
         initializeMediaSession();
 
         // Initialize the player to play one video
-        initializePlayer(mRecipe.getSteps().get(mStepNumber));
+//        initializePlayer(mRecipe.getSteps().get(mStepNumber));
 
         // Change actionbar title to recipe name
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -132,8 +133,15 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onResume() {
+        super.onResume();
+        // Initialize the player to play one video
+        initializePlayer(mRecipe.getSteps().get(mStepNumber));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         releasePlayer();
         mMediaSession.setActive(false);
     }
@@ -154,36 +162,35 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
             LoadControl loadControl = new DefaultLoadControl();
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
             mPlayerView.setPlayer(mExoPlayer);
+
+            // Set a default image if video doesn't exist
+            // and thumbnail is not available
+            if (step.getVideoUrl() == null || step.getVideoUrl().isEmpty())
+                if (step.getThumbnailUrl() == null || step.getVideoUrl().isEmpty()) {
+                    Bitmap defaultIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_i_love_food_white);
+                    mPlayerView.setDefaultArtwork(defaultIcon);
+                    return;
+                }
+
+            // Set the ExoPlayer.EventListener to this activity.
+            mExoPlayer.addListener(this);
+
+            // Get video Uri
+            Uri mediaUri = Uri.parse(step.getVideoUrl());
+
+            // Prepare the MediaSource.
+            String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
+            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
+                    getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+
+            // Load up the media source
+            // and start playing if the fragment is visible
+            // the checking is necessary because the view pager adapter
+            // keeps pages to the left and right loaded
+            mExoPlayer.prepare(mediaSource);
+            if (this.getUserVisibleHint())
+                mExoPlayer.setPlayWhenReady(true);
         }
-
-        // Set a default image if video doesn't exist
-        // and thumbnail is not available
-        if (step.getVideoUrl() == null || step.getVideoUrl().isEmpty())
-            if (step.getThumbnailUrl() == null || step.getVideoUrl().isEmpty()) {
-                Bitmap defaultIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_i_love_food_white);
-                mPlayerView.setDefaultArtwork(defaultIcon);
-                return;
-            }
-
-        // Set the ExoPlayer.EventListener to this activity.
-        mExoPlayer.addListener(this);
-
-        // Get video Uri
-        Uri mediaUri = Uri.parse(step.getVideoUrl());
-
-        // Prepare the MediaSource.
-        String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
-        MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
-                getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
-
-        // Load up the media source
-        // and start playing if the fragment is visible
-        // the checking is necessary because the view pager adapter
-        // keeps pages to the left and right loaded
-        mExoPlayer.prepare(mediaSource);
-        if (this.getUserVisibleHint())
-            mExoPlayer.setPlayWhenReady(true);
-
     }
 
     /**
