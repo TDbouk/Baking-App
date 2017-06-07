@@ -36,12 +36,6 @@
                 android:resource="@xml/recently_viewed_recipe_widget_info" />
         </receiver>
 
-        <receiver android:name=".ui.StepPageFragment$MediaReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
-            </intent-filter>
-        </receiver>
-
         <service
             android:name=".widget.DetailWidgetRemoteViewsService"
             android:exported="false"
