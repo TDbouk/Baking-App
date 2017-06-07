@@ -39,10 +39,13 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
 
     private static final String ARG_RECIPE = "recipe";
     private static final String ARG_STEP_NUMBER = "step_number";
+    private static final String EXTRA_SEEK_POSITION = "seek_position";
+
     private Recipe mRecipe;
     private int mStepNumber;
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
+    private long mSeekPosition;
 
     public StepPageFragment() {
         // Required empty public constructor
@@ -72,6 +75,16 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
             mRecipe = getArguments().getParcelable(ARG_RECIPE);
             mStepNumber = getArguments().getInt(ARG_STEP_NUMBER);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        // Save seek position of video
+        if (mSeekPosition != 0) {
+            outState.putLong(EXTRA_SEEK_POSITION, mSeekPosition);
+        }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -108,6 +121,11 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
         if (actionBar != null)
             actionBar.setTitle(mRecipe.getName());
 
+        // Restore seek position of the player
+        if (savedInstanceState != null) {
+            mSeekPosition = savedInstanceState.getLong(EXTRA_SEEK_POSITION);
+        }
+
         return rootView;
     }
 
@@ -121,7 +139,18 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
     @Override
     public void onPause() {
         super.onPause();
+        saveSeekPosition();
         releasePlayer();
+    }
+
+    /**
+     * Save seek position in order to restore it if the user
+     * hides the app while the video is playing.
+     */
+    private void saveSeekPosition() {
+        if (mExoPlayer != null) {
+            mSeekPosition = mExoPlayer.getCurrentPosition();
+        }
     }
 
     /**
@@ -166,8 +195,12 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
             // the checking is necessary because the view pager adapter
             // keeps pages to the left and right loaded
             mExoPlayer.prepare(mediaSource);
-            if (this.getUserVisibleHint())
+            if (this.getUserVisibleHint()) {
+                if (mSeekPosition != 0) {
+                    mExoPlayer.seekTo(mSeekPosition);
+                }
                 mExoPlayer.setPlayWhenReady(true);
+            }
         }
     }
 
