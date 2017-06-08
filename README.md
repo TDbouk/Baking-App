@@ -49,6 +49,7 @@ Requires API 17+
 [Volley](https://github.com/google/volley) - Transmitting Networking Data  
 [ExoPlayer](https://github.com/google/ExoPlayer) - Media Player  
 [Espresso](https://google.github.io/android-testing-support-library/docs/espresso/index.html) - Android Testing Support Library (ATSL)  
+[ButterKnife](https://jakewharton.github.io/butterknife/) - Bind Android views  
 
 ### Contributing 
 Pull requests are gracefully accepted.  
