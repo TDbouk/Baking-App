@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
 import tdbouk.udacity.bakingapp.idlingResource.SimpleIdlingResource;
+import tdbouk.udacity.bakingapp.ui.fragment.RecipeFragment;
 
 public class MainActivity extends AppCompatActivity implements RecipeFragment.OnFragmentInteractionListener {
 

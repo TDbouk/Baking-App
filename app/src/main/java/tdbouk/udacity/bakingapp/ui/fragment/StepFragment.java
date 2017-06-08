@@ -1,4 +1,4 @@
-package tdbouk.udacity.bakingapp.ui;
+package tdbouk.udacity.bakingapp.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

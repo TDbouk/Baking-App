@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
+import tdbouk.udacity.bakingapp.ui.fragment.StepFragment;
 
 public class DetailActivity extends AppCompatActivity {
 

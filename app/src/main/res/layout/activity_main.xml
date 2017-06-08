@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/main_container"
-        android:name="tdbouk.udacity.bakingapp.ui.RecipeFragment"
+        android:name="tdbouk.udacity.bakingapp.ui.fragment.RecipeFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_recipe" />

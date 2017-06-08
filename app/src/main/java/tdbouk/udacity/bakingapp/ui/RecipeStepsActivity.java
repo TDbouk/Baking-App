@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
+import tdbouk.udacity.bakingapp.ui.fragment.RecipeStepsFragment;
+import tdbouk.udacity.bakingapp.ui.fragment.StepFragment;
 
 public class RecipeStepsActivity extends AppCompatActivity implements
         RecipeStepsFragment.OnFragmentInteractionListener {

@@ -1,4 +1,4 @@
-package tdbouk.udacity.bakingapp.ui;
+package tdbouk.udacity.bakingapp.ui.fragment;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

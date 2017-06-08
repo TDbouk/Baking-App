@@ -1,4 +1,4 @@
-package tdbouk.udacity.bakingapp.ui;
+package tdbouk.udacity.bakingapp.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
 import tdbouk.udacity.bakingapp.idlingResource.SimpleIdlingResource;
+import tdbouk.udacity.bakingapp.ui.MainActivity;
 import tdbouk.udacity.bakingapp.utils.Constants;
 import tdbouk.udacity.bakingapp.utils.Utility;
 
