@@ -3,6 +3,7 @@ package tdbouk.udacity.bakingapp.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +17,10 @@ import tdbouk.udacity.bakingapp.data.Ingredient;
 import tdbouk.udacity.bakingapp.data.Recipe;
 import tdbouk.udacity.bakingapp.data.Step;
 
-public class Utility {
+public final class Utility {
+
+    private Utility() {
+    }
 
     /**
      * Parse Json string to get the recipe info
