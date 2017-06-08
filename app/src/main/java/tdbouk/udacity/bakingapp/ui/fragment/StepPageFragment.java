@@ -30,6 +30,9 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
 import tdbouk.udacity.bakingapp.data.Step;
@@ -41,11 +44,17 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
     private static final String ARG_STEP_NUMBER = "step_number";
     private static final String EXTRA_SEEK_POSITION = "seek_position";
 
+    @BindView(R.id.playerView)
+    SimpleExoPlayerView mPlayerView;
+    @BindView(R.id.tv_recipe_description)
+    TextView mIngredientsTextView;
+
     private Recipe mRecipe;
     private int mStepNumber;
     private SimpleExoPlayer mExoPlayer;
-    private SimpleExoPlayerView mPlayerView;
     private long mSeekPosition;
+
+    private Unbinder mUnbinder;
 
     public StepPageFragment() {
         // Required empty public constructor
@@ -108,13 +117,10 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.pager_item_step, container, false);
+        mUnbinder = ButterKnife.bind(this, rootView);
 
         // Set up recipe description view
-        TextView textView = (TextView) rootView.findViewById(R.id.tv_recipe_description);
-        textView.setText(mRecipe.getSteps().get(mStepNumber).getDescription());
-
-        // Initialize the player view.
-        mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
+        mIngredientsTextView.setText(mRecipe.getSteps().get(mStepNumber).getDescription());
 
         // Change actionbar title to recipe name
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -242,4 +248,9 @@ public class StepPageFragment extends Fragment implements ExoPlayer.EventListene
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+    }
 }

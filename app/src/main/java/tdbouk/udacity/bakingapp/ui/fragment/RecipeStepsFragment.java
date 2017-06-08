@@ -17,6 +17,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
 import tdbouk.udacity.bakingapp.data.Step;
@@ -31,7 +34,9 @@ public class RecipeStepsFragment extends Fragment {
     private final String EXTRA_SELECTED_ITEM_INDEX = "selected_item_index";
     private final String EXTRA_LIST_STATE = "list_state";
 
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.rv_steps)
+    RecyclerView mRecyclerView;
+
     private LinearLayoutManager mLinearManager;
     private Recipe mRecipe;
     private int mPosition;
@@ -39,6 +44,8 @@ public class RecipeStepsFragment extends Fragment {
     private String mIngredientsText = "";
     private int mLastSelectedListIndex = RecyclerView.NO_POSITION;
     private int[] mListState;
+
+    private Unbinder mUnbinder;
 
     public RecipeStepsFragment() {
         // Required empty public constructor
@@ -104,6 +111,7 @@ public class RecipeStepsFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
+        mUnbinder = ButterKnife.bind(this, rootView);
 
         // Set up Bottom Sheet Text
         setIngredientsText(mIngredientsText);
@@ -118,7 +126,6 @@ public class RecipeStepsFragment extends Fragment {
         }
 
         // Set up Recycler View
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_steps);
         mLinearManager = new LinearLayoutManager(getActivity());
         RecipeStepsAdapter mAdapter = new RecipeStepsAdapter(getActivity(), mRecipe);
         mRecyclerView.setLayoutManager(mLinearManager);
@@ -231,7 +238,7 @@ public class RecipeStepsFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    interface OnFragmentInteractionListener {
+    public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Recipe recipe, int stepNumber);
 
         void onSetIngredientsText(String text);
@@ -271,11 +278,12 @@ public class RecipeStepsFragment extends Fragment {
         private Recipe mRecipe;
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView mRecipeShortDescription;
+            @BindView(R.id.tv_recipe_step_short_description)
+            TextView mRecipeShortDescription;
 
             ViewHolder(TextView v) {
                 super(v);
-                mRecipeShortDescription = (TextView) v.findViewById(R.id.tv_recipe_step_short_description);
+                ButterKnife.bind(this, v);
             }
         }
 

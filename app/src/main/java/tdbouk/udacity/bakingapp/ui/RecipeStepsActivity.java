@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
 import tdbouk.udacity.bakingapp.ui.fragment.RecipeStepsFragment;
@@ -20,23 +22,26 @@ import tdbouk.udacity.bakingapp.ui.fragment.StepFragment;
 public class RecipeStepsActivity extends AppCompatActivity implements
         RecipeStepsFragment.OnFragmentInteractionListener {
 
-    private TextView mIngredientsTextView;
+    @BindView(R.id.tv_ingredients)
+    TextView mIngredientsTextView;
+    @BindView(R.id.bottom_sheet)
+    View mBottomSheet;
+    @BindView(R.id.fab_show_ingredients)
+    FloatingActionButton mIngredientsFab;
+    @BindView(R.id.img_toolbar)
+    ImageView mToolbarImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes_steps);
+        ButterKnife.bind(this);
 
         // Set up Bottom Sheet
-        mIngredientsTextView = (TextView) findViewById(R.id.tv_ingredients);
-        View bottomSheet = findViewById(R.id.bottom_sheet);
-        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(mBottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
-        FloatingActionButton ingredientsFab = (FloatingActionButton)
-                findViewById(R.id.fab_show_ingredients);
-
-        ingredientsFab.setOnClickListener(new View.OnClickListener() {
+        mIngredientsFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
@@ -97,6 +102,6 @@ public class RecipeStepsActivity extends AppCompatActivity implements
 
     @Override
     public void onSetToolBarImage(int resource) {
-        ((ImageView) findViewById(R.id.img_toolbar)).setImageResource(resource);
+        mToolbarImageView.setImageResource(resource);
     }
 }

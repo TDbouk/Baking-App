@@ -15,6 +15,9 @@ import android.widget.ImageView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
 import tdbouk.udacity.bakingapp.events.ViewPagerEvent;
@@ -25,10 +28,13 @@ public class StepFragment extends Fragment {
     private static final String ARG_RECIPE = "recipe";
     private static final String ARG_STEP_NUMBER = "step_number";
 
+    @BindView(R.id.pager)
     ViewPager mPager;
     MyAdapter mAdapter;
     Recipe mRecipe;
     int mStepNumber = 0;
+
+    private Unbinder mUnbinder;
 
     public static StepFragment newInstance(Recipe recipe, int stepNumber) {
         StepFragment fragment = new StepFragment();
@@ -53,10 +59,9 @@ public class StepFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step, container, false);
+        mUnbinder = ButterKnife.bind(this, rootView);
 
         mAdapter = new MyAdapter(getActivity().getSupportFragmentManager());
-        mPager = (ViewPager) rootView.findViewById(R.id.pager);
-
         mPager.setAdapter(mAdapter);
 
         // set pager item to the step selected by the user
@@ -125,5 +130,11 @@ public class StepFragment extends Fragment {
             setToolBarImage(Utility.getRecipeImageResource(mRecipe.getPositionInGridView()));
             return StepPageFragment.newInstance(mRecipe, position);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }

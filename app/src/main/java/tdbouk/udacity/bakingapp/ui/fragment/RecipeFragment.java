@@ -23,6 +23,9 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import tdbouk.udacity.bakingapp.R;
 import tdbouk.udacity.bakingapp.data.Recipe;
 import tdbouk.udacity.bakingapp.idlingResource.SimpleIdlingResource;
@@ -33,12 +36,15 @@ import tdbouk.udacity.bakingapp.utils.Utility;
 public class RecipeFragment extends Fragment {
 
     private final String TAG = getClass().getSimpleName();
+
+    @BindView(R.id.rv_recipes)
+    RecyclerView mRecyclerView;
+
     private OnFragmentInteractionListener mListener;
     private ArrayList<Recipe> mReceipes = new ArrayList<>();
-    private RecyclerView mRecyclerView;
     private GridLayoutManager mGridManager;
     private RecipesAdapter mAdapter;
-
+    private Unbinder mUnbinder;
 
     public RecipeFragment() {
         // Required empty public constructor
@@ -87,8 +93,8 @@ public class RecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rooView = inflater.inflate(R.layout.fragment_recipe, container, false);
+        mUnbinder = ButterKnife.bind(this, rooView);
 
-        mRecyclerView = (RecyclerView) rooView.findViewById(R.id.rv_recipes);
         mGridManager = new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.grid_view_columns));
         mAdapter = new RecipesAdapter(getActivity(), null);
         mRecyclerView.setLayoutManager(mGridManager);
@@ -120,6 +126,12 @@ public class RecipeFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+    }
+
     public interface OnFragmentInteractionListener {
         void onRecipeFragmentInteraction(Recipe recipe, int position);
     }
@@ -129,19 +141,20 @@ public class RecipeFragment extends Fragment {
         private Context mContext;
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView recipeTitle;
-            final TextView recipeServings;
-            final TextView recipeSteps;
-            final TextView recipeIngredients;
-            final ImageView recipeImage;
+            @BindView(R.id.tv_recipe_title)
+            TextView recipeTitle;
+            @BindView(R.id.tv_recipe_number_servings)
+            TextView recipeServings;
+            @BindView(R.id.tv_recipe_number_steps)
+            TextView recipeSteps;
+            @BindView(R.id.tv_recipe_number_ingredients)
+            TextView recipeIngredients;
+            @BindView(R.id.iv_recipe_image)
+            ImageView recipeImage;
 
             ViewHolder(View v) {
                 super(v);
-                recipeTitle = (TextView) v.findViewById(R.id.tv_recipe_title);
-                recipeServings = (TextView) v.findViewById(R.id.tv_recipe_number_servings);
-                recipeSteps = (TextView) v.findViewById(R.id.tv_recipe_number_steps);
-                recipeIngredients = (TextView) v.findViewById(R.id.tv_recipe_number_ingredients);
-                recipeImage = (ImageView) v.findViewById(R.id.iv_recipe_image);
+                ButterKnife.bind(this, v);
             }
         }
 
